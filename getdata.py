@@ -25,8 +25,10 @@ execution = bsObj.find('input', {'name':'execution'})['value']
 
 
 params = {
-    'username': os.environ.get('STU_ID'),
-    'password': os.environ.get('STU_PWD'),
+    # 'username': os.environ.get('STU_ID'),
+    # 'password': os.environ.get('STU_PWD'),
+    'username': input('请输入学号：'),
+    'password': input('请输入密码：'),
     'lt': lt,
     'execution': execution,
     '_eventId': 'submit',
