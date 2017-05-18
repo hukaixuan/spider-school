@@ -39,6 +39,12 @@ resp = session.post("http://ids.qfnu.edu.cn/authserver/login", data=params, head
 resp = session.get("http://aqjy.qfnu.edu.cn/exam_tyrz_check.php")
 # resp = session.get('http://aqjy.qfnu.edu.cn/exam_tyrz_check.php?ticket=ST-4830810-DCFO6O2s3inwIOZynH3L-1b6n-cas-1495022270849')
 
+# resp = session.get("http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6")
+# bsObj = BeautifulSoup(resp.text, "html.parser")
+# print(resp.text)
+# link = bsObj.find('a',class_='zxks-bnt-green startKs')
+# print(link['href'])
+
 from pymongo import MongoClient
 client = MongoClient()
 db = client.shitiDB    # 数据库名 shitiDB
@@ -60,7 +66,13 @@ def post_per_page(runpage):   # -1 ~ 13
     # values['mode'] = 'test'
     if runpage==-1:
         # resp = session.get('http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&tikubh=8692&cmd=testing')
-        resp = session.get('http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&cmd=kaoshi_chushih&kaoshih=28423')
+        resp = session.get("http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6")
+        bsObj = BeautifulSoup(resp.text, "html.parser")
+        # print(resp.text)
+        link = bsObj.find('a',class_='zxks-bnt-green startKs')
+        link = 'http://aqjy.qfnu.edu.cn/'+str(link['href'])
+        # resp = session.get('http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&cmd=kaoshi_chushih&kaoshih=28423')
+        resp = session.get(link)
     else:
         resp = session.post(url, data=values, headers=headers)
     resp.encoding = 'gb2312'
