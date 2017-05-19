@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# 模拟登录
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -21,6 +22,8 @@ session = requests.session()
 #           ===>http://202.194.188.19/caslogin.jsp
 # http://ids.qfnu.edu.cn/authserver/login?service=http%3A%2F%2Fmy.qfnu.edu.cn%2Flogin.portal
 #           ===>http://my.qfnu.edu.cn/index.portal
+
+# 先GET一下登录页面获得隐藏字段
 resp = session.get("http://ids.qfnu.edu.cn/authserver/login?service=http%3A%2F%2F202.194.188.19%2Fcaslogin.jsp", headers=headers)
 bsObj = BeautifulSoup(resp.text, "html.parser")     # 注意resp要带text
 lt = bsObj.find('input', {'name':'lt'})['value']
@@ -37,7 +40,7 @@ params = {
     'rmShown': '1'
 }
 
-
+# post 数据登录成功
 resp = session.post("http://ids.qfnu.edu.cn/authserver/login?service=http%3A%2F%2F202.194.188.19%2Fcaslogin.jsp", data=params, headers=headers)
 
 

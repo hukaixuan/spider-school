@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import requests
 from bs4 import BeautifulSoup
-import os
 
+
+########### 模拟登录 ##################################
 headers = {
     # 'Host': 'ids.qfnu.edu.cn',
     'Connection': 'keep-alive',
@@ -37,10 +38,12 @@ params = {
 
 
 resp = session.post("http://ids.qfnu.edu.cn/authserver/login?service=http%3A%2F%2F202.194.188.19%2Fcaslogin.jsp", data=params, headers=headers)
+####################################################
 
 
-tikubhs = [8692, 10988, 10989, 10990, 10991, 10992, 10993, 10994, 10995]
-pages = [153, 77, 13, 18, 22, 27, 10, 39, 12]
+########################## 爬取题库并存储 ###############################
+tikubhs = [8692, 10988, 10989, 10990, 10991, 10992, 10993, 10994, 10995]  # 每一类题库的编号
+pages = [153, 77, 13, 18, 22, 27, 10, 39, 12]  # 每一个题库的题目页数
 
 from pymongo import MongoClient
 client = MongoClient()
@@ -64,6 +67,6 @@ for tikubh, page_range in zip(tikubhs, pages):
             d = {'shitibh':shitibh, 'tikubh':tikubh, 'timu':timu, 'daan':daan}
             values.append(d)
         new_result = shiti_table.insert_many(values)
-        print('Multiple posts: {0}'.format(new_result.inserted_ids))
-
+        # print('Multiple posts: {0}'.format(new_result.inserted_ids))
+####################################################################
 

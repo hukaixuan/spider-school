@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 import requests
 from bs4 import BeautifulSoup
+from pymongo import MongoClient
 
+client = MongoClient()
+db = client.shitiDB    # 数据库名 shitiDB
+table = db.shitis    # 表名 shitis
+
+###################### 模拟登录 ##########################
 headers = {
     # 'Host': 'ids.qfnu.edu.cn',
     'Connection': 'keep-alive',
@@ -14,44 +20,39 @@ headers = {
     'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4'
 }
 
-session = requests.session()
+def login(username, password):
 
-resp = session.get("http://ids.qfnu.edu.cn/authserver/login?service=http%3A%2F%2F202.194.188.19%2Fcaslogin.jsp", headers=headers)
-bsObj = BeautifulSoup(resp.text, "html.parser")     # 注意resp要带text
-lt = bsObj.find('input', {'name':'lt'})['value']
-execution = bsObj.find('input', {'name':'execution'})['value']
+    session = requests.session()
 
-
-params = {
-    # 'username': os.environ.get('STU_ID'),
-    # 'password': os.environ.get('STU_PWD'),
-    'username': input('请输入学号：'),
-    'password': input('请输入密码：'),
-    'lt': lt,
-    'execution': execution,
-    '_eventId': 'submit',
-    'rmShown': '1'
-}
+    resp = session.get("http://ids.qfnu.edu.cn/authserver/login?service=http%3A%2F%2F202.194.188.19%2Fcaslogin.jsp", headers=headers)
+    bsObj = BeautifulSoup(resp.text, "html.parser")     # 注意resp要带text
+    lt = bsObj.find('input', {'name':'lt'})['value']
+    execution = bsObj.find('input', {'name':'execution'})['value']
 
 
-# resp = session.post("http://ids.qfnu.edu.cn/authserver/login?service=http%3A%2F%2F202.194.188.19%2Fcaslogin.jsp", data=params, headers=headers)
-resp = session.post("http://ids.qfnu.edu.cn/authserver/login", data=params, headers=headers)
-resp = session.get("http://aqjy.qfnu.edu.cn/exam_tyrz_check.php")
-# resp = session.get('http://aqjy.qfnu.edu.cn/exam_tyrz_check.php?ticket=ST-4830810-DCFO6O2s3inwIOZynH3L-1b6n-cas-1495022270849')
+    params = {
+        # 'username': os.environ.get('STU_ID'),
+        # 'password': os.environ.get('STU_PWD'),
+        'username': username,
+        'password': password,
+        'lt': lt,
+        'execution': execution,
+        '_eventId': 'submit',
+        'rmShown': '1'
+    }
 
-# resp = session.get("http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6")
-# bsObj = BeautifulSoup(resp.text, "html.parser")
-# print(resp.text)
-# link = bsObj.find('a',class_='zxks-bnt-green startKs')
-# print(link['href'])
 
-from pymongo import MongoClient
-client = MongoClient()
-db = client.shitiDB    # 数据库名 shitiDB
-table = db.shitis    # 表名 shitis
-# resp = session.get('http://aqjy.qfnu.edu.cn/exam_tyrz_check.php?ticket=ST-4830810-DCFO6O2s3inwIOZynH3L-1b6n-cas-1495022270849')
+    # resp = session.post("http://ids.qfnu.edu.cn/authserver/login?service=http%3A%2F%2F202.194.188.19%2Fcaslogin.jsp", data=params, headers=headers)
+    resp = session.post("http://ids.qfnu.edu.cn/authserver/login", data=params, headers=headers)
+    ########################################################
+    
+    ########################### 答题 #######################################
+    resp = session.get("http://aqjy.qfnu.edu.cn/exam_tyrz_check.php")
+    # resp = session.get('http://aqjy.qfnu.edu.cn/exam_tyrz_check.php?ticket=ST-4830810-DCFO6O2s3inwIOZynH3L-1b6n-cas-1495022270849')
 
-def post_per_page(runpage):   # -1 ~ 13
+    return session
+
+def post_per_page(session, runpage):   # -1 ~ 13
     # url = "http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&cmd=dati&mode=test"
     url = "http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&cmd=dati"
     # url = "http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&cmd=kaoshi_chushih&kaoshih=28423"
@@ -97,7 +98,7 @@ def post_per_page(runpage):   # -1 ~ 13
             daan_text = daan_li.text
             if daan in daan_text:
                 values[shiti_id] = daan_li.input['value']
-    values['tijiao'] = 1 if runpage==13 else 0
+    # values['tijiao'] = 1 if runpage==13 else 0
     values['postflag'] = 1
     resp = session.post(url, data=values, headers=headers)
     print(values)
@@ -105,16 +106,16 @@ def post_per_page(runpage):   # -1 ~ 13
     return resp
 
 
-for x in range(-1, 14):
-    res = post_per_page(x)
-    if x==13:
-        print(res.text)
+def process(username, password ):
+    session = login(username, password)
+    for x in range(-1, 14):
+        res = post_per_page(session, x)
+        if x==13:
+            return res.text
+#########################################################
 
-
-
-
-
-
+if __name__ == '__main__':
+    print(process(input('请输学号：'), input('请输入密码：')))
 
 
 
