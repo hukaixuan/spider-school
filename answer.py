@@ -121,7 +121,7 @@ def post_per_page(session, page):
     values['postflag'] = 1
     resp = session.post(url, data=values, headers=headers)
     print('#'*40)
-    print('每次页面跳转提交的数据:',values)
+    print('本次页面跳转提交的数据:',values)
     print('#'*40)
     resp.encoding = 'gb2312'
     return resp
@@ -138,11 +138,11 @@ def process(username, password ):
         res = post_per_page(session, x-2)           # x: 1 -> 10; 参数page: -1 -> 8
         if x == TEST_PAGE_NUM:
             bsObj = BeautifulSoup(res.text, "html.parser")
-            print(bsObj.find('div', class_="shuoming").text)
+            return bsObj.find('div', class_="shuoming").text
 #########################################################
 
 if __name__ == '__main__':
-    process(input('请输学号：'), input('请输入密码：'))
+    print(process(input('请输学号：'), input('请输入密码：')))
 
 
 

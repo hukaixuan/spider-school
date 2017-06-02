@@ -11,9 +11,8 @@ def index():
 def dosomething():
     username = request.form.get('username')
     password = request.form.get('password')
-    process(username, password)
-    return 'done'
-
+    return process(username, password)
+    
 
 if __name__ == '__main__':
     app.run()
