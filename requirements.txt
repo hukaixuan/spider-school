@@ -1,10 +1,17 @@
+amqp==2.3.2
 beautifulsoup4==4.5.3
+billiard==3.5.0.4
+celery==4.2.1
 click==6.7
 Flask==0.12.2
 itsdangerous==0.24
 Jinja2==2.9.6
+kombu==4.2.1
 MarkupSafe==1.0
 pymongo==3.4.0
 PyMySQL==0.7.11
+pytz==2018.7
+redis==2.10.6
 requests==2.13.0
+vine==1.1.4
 Werkzeug==0.12.2

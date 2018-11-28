@@ -5,10 +5,19 @@
     <title>👀</title>
 </head>
 <body>
+    <h3>emm... 教务...实验...答题..自动</h3>
+    <p>安全知识还是要看的，都看了还是过不了再来用我好不好👀</p>
+    <h4>输入学号、密码，进入考试</h4>
+    <p>没时间鼓捣前端，将就用吧</p>
     <form action="{{url_for('dosomething')}}" method="post">
         <input name="username" type="text" placeholder="学号："> <br>
         <input name="password" type="password" placeholder="密码："> <br>
         <input type="submit">
     </form>
+    <hr>
+    <p>请老师哥和杯咖啡</p>
+    <img src="{{ url_for('static', filename='img/alipay.jpg') }}" alt="支付宝" width="200" height="300">
+    <p>有问题？</p>
+    <img src="{{ url_for('static', filename='img/wechat.png') }}" alt="微信" width="200" height="200">
 </body>
 </html>

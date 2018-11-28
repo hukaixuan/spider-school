@@ -129,16 +129,16 @@ def post_per_page(session, page):
 
 def process(username, password ):
     session = login(username, password)
-    # for x in range(1, KAOSHI_PAGE_NUM):       # 正式考试
-        # res = post_per_page(session, x-2)
-        # if x+2 == KAOSHI_PAGE_NUM:
-        #     return res.text
+    for x in range(1, KAOSHI_PAGE_NUM):       # 正式考试
+        res = post_per_page(session, x-2)
+        if x+2 == KAOSHI_PAGE_NUM:
+            return res.text
 
-    for x in range(1, TEST_PAGE_NUM+1):           # 在线练习
-        res = post_per_page(session, x-2)           # x: 1 -> 10; 参数page: -1 -> 8
-        if x == TEST_PAGE_NUM:
-            bsObj = BeautifulSoup(res.text, "html.parser")
-            return bsObj.find('div', class_="shuoming").text
+    # for x in range(1, TEST_PAGE_NUM+1):           # 在线练习
+    #     res = post_per_page(session, x-2)           # x: 1 -> 10; 参数page: -1 -> 8
+    #     if x == TEST_PAGE_NUM:
+    #         bsObj = BeautifulSoup(res.text, "html.parser")
+    #         return bsObj.find('div', class_="shuoming").text
 #########################################################
 
 if __name__ == '__main__':

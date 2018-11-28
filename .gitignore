@@ -1,2 +1,4 @@
 .env/
 test.html
+__pycache__
+.vscode/
