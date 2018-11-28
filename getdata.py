@@ -31,6 +31,7 @@ for tikubh, page_range in zip(tikubhs, pages):
             daan = daan_str.text[daan_str.text.find('标准答案')+5:].strip(' ）')
             d = {'shitibh':shitibh, 'tikubh':tikubh, 'timu':timu, 'daan':daan}
             values.append(d)
+        print(values)
         new_result = shiti_table.insert_many(values)
         # print('Multiple posts: {0}'.format(new_result.inserted_ids))
 ####################################################################
