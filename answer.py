@@ -62,10 +62,10 @@ def login(username, password):
 ########################### 答题 #######################################
 def post_per_page(session, page):   
     # 在线练习页面
-    url = "http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&cmd=dati&mode=test"   
+    # url = "http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&cmd=dati&mode=test"   
 
     # 正式考试题页面
-    # url = "http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&cmd=dati"    
+    url = "http://aqjy.qfnu.edu.cn/redir.php?catalog_id=6&cmd=dati"
 
     # 点击下一页页面提交数据：runpage一直为0，page从第一页无 到0 到页数-2，direction为1表示点击了下一页
     values = {}
